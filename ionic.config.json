@@ -1,0 +1,7 @@
+{
+  "name": "mercadovecino",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
