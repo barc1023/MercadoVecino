@@ -1,4 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
+import './app/core/firebase';
 import {
   RouteReuseStrategy,
   provideRouter,
