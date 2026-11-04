@@ -2,12 +2,23 @@ import type { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: '',
-    redirectTo: 'folder/Inbox',
-    pathMatch: 'full',
+    path: 'home',
+    loadComponent: () =>
+      import('./pages/home/home.page').then(m => m.HomePage)
   },
   {
-    path: 'folder/:folder',
-    loadComponent: () => import('./folder/folder.page').then((m) => m.FolderPage),
+    path: 'orders',
+    loadComponent: () =>
+      import('./pages/orders/orders.page').then(m => m.OrdersPage)
   },
+  {
+    path: 'catalog',
+    loadComponent: () =>
+      import('./pages/catalog/catalog.page').then(m => m.CatalogPage)
+  },
+  {
+    path: '',
+    redirectTo: 'home',
+    pathMatch: 'full'
+  }
 ];

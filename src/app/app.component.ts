@@ -1,86 +1,51 @@
-import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+
 import {
   IonApp,
-  IonSplitPane,
   IonMenu,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
   IonContent,
   IonList,
-  IonListHeader,
-  IonNote,
-  IonMenuToggle,
   IonItem,
-  IonIcon,
   IonLabel,
-  IonRouterOutlet,
-  IonRouterLink,
+  IonMenuToggle,
+  IonRouterOutlet
 } from '@ionic/angular';
-import { addIcons } from 'ionicons';
-import {
-  mailOutline,
-  mailSharp,
-  paperPlaneOutline,
-  paperPlaneSharp,
-  heartOutline,
-  heartSharp,
-  archiveOutline,
-  archiveSharp,
-  trashOutline,
-  trashSharp,
-  warningOutline,
-  warningSharp,
-  bookmarkOutline,
-  bookmarkSharp,
-} from 'ionicons/icons';
+
+import { SessionService } from './services/session.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
+  standalone: true,
   imports: [
+    CommonModule,
     RouterLink,
-    RouterLinkActive,
     IonApp,
-    IonSplitPane,
     IonMenu,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
     IonContent,
     IonList,
-    IonListHeader,
-    IonNote,
-    IonMenuToggle,
     IonItem,
-    IonIcon,
     IonLabel,
-    IonRouterLink,
-    IonRouterOutlet,
+    IonMenuToggle,
+    IonRouterOutlet
   ],
 })
 export class AppComponent {
-  protected readonly appPages = [
-    { title: 'Inbox', url: '/folder/Inbox', icon: 'mail' },
-    { title: 'Outbox', url: '/folder/Outbox', icon: 'paper-plane' },
-    { title: 'Favorites', url: '/folder/Favorites', icon: 'heart' },
-    { title: 'Archived', url: '/folder/Archived', icon: 'archive' },
-    { title: 'Trash', url: '/folder/Trash', icon: 'trash' },
-    { title: 'Spam', url: '/folder/Spam', icon: 'warning' },
-  ];
-  protected readonly labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
+
+  private sessionService = inject(SessionService);
+
+  role = this.sessionService.getRole();
+
   constructor() {
-    addIcons({
-      mailOutline,
-      mailSharp,
-      paperPlaneOutline,
-      paperPlaneSharp,
-      heartOutline,
-      heartSharp,
-      archiveOutline,
-      archiveSharp,
-      trashOutline,
-      trashSharp,
-      warningOutline,
-      warningSharp,
-      bookmarkOutline,
-      bookmarkSharp,
-    });
+    console.log('ROL ACTUAL:', this.role);
   }
 }
