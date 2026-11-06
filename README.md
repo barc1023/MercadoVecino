@@ -6,10 +6,10 @@ Aplicación móvil de pedidos de tiendas de barrio para **Frescos del Istmo S.A.
 
 - Ionic + Angular (componentes **standalone**, sin módulos)
 - Capacitor
-- Firebase: Authentication (correo y contraseña) y Cloud Firestore
+- Firebase Web SDK: Authentication (correo y contraseña) y Cloud Firestore
 - pnpm como gestor de paquetes
 
-La app no tiene backend propio: toda la lógica de datos y seguridad vive en Firebase y en `firestore.rules`.
+La app no tiene backend propio: toda la lógica de datos y seguridad vive en Firebase y en [`firestore.rules`](firestore.rules).
 
 ## Requisitos
 
@@ -39,6 +39,15 @@ copy src\environments\environment.prod.example.ts src\environments\environment.p
 
 Luego abre ambos archivos y reemplaza los valores de `firebase` con la configuración del proyecto (Firebase Console → Project settings → Your apps → Config). Pide los valores al líder del equipo.
 
+En Firebase Console activa **Authentication → Email/Password**, crea Cloud Firestore y publica las reglas e índice:
+
+```
+pnpm dlx firebase-tools login
+pnpm dlx firebase-tools deploy --only firestore --project TU_PROYECTO
+```
+
+El registro público crea únicamente perfiles `cliente`. Para habilitar un comerciante, crea primero la cuenta mediante Firebase Authentication y después crea su documento `users/{uid}` con `role: "comerciante"` desde un entorno administrativo seguro o durante la configuración inicial del proyecto.
+
 ## Ejecutar la app
 
 ```
@@ -52,6 +61,17 @@ Se abre en `http://localhost:8100`.
 ```
 pnpm build
 ```
+
+## Automatización y despliegue
+
+- [CI](.github/workflows/ci.yml) instala dependencias, valida estilo, ejecuta pruebas unitarias y compila cada PR y cada cambio a `main`.
+- [Deploy Firebase](.github/workflows/deploy-firebase.yml) compila y publica Hosting, reglas e índices desde `main` o ejecución manual.
+
+Antes de activar el despliegue configura las variables de GitHub `FIREBASE_PROJECT_ID`, `FIREBASE_API_KEY`, `FIREBASE_AUTH_DOMAIN`, `FIREBASE_STORAGE_BUCKET`, `FIREBASE_MESSAGING_SENDER_ID`, `FIREBASE_APP_ID` y el secreto `FIREBASE_TOKEN`.
+
+## Documentación
+
+El contenido listo para el wiki está en [`docs/wiki`](docs/wiki/Home.md), y los diagramas Mermaid editables están en [`docs/diagrams`](docs/diagrams). El backlog de Jira para los sprints 3 y 4 está en [Jira y sprints](docs/wiki/Jira-y-sprints.md).
 
 ## Estructura principal
 

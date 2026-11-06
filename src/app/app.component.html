@@ -1,7 +1,5 @@
 <ion-app>
-
-  <ion-menu content-id="main-content">
-
+  <ion-menu content-id="main-content" [disabled]="!session()">
     <ion-header>
       <ion-toolbar color="primary">
         <ion-title>MercadoVecino</ion-title>
@@ -9,45 +7,54 @@
     </ion-header>
 
     <ion-content>
+      @if (session(); as currentSession) {
+        <ion-list>
+          <ion-item lines="none"
+            ><ion-label
+              ><strong>{{ currentSession.fullName }}</strong>
+              <p>{{ currentSession.role === 'comerciante' ? 'Comerciante' : 'Cliente' }}</p></ion-label
+            ></ion-item
+          >
+        </ion-list>
+        <ion-list>
+          <ion-menu-toggle auto-hide="true"
+            ><ion-item routerLink="/home" routerLinkActive="selected">
+              <ion-label>Inicio</ion-label>
+            </ion-item></ion-menu-toggle
+          >
 
-      <ion-list>
+          <ion-menu-toggle auto-hide="true"
+            ><ion-item routerLink="/catalog" routerLinkActive="selected">
+              <ion-label>Catálogo</ion-label>
+            </ion-item></ion-menu-toggle
+          >
 
-        <ion-menu-toggle auto-hide="false">
+          @if (currentSession.role === 'cliente') {
+            <ion-menu-toggle auto-hide="true"
+              ><ion-item routerLink="/orders" routerLinkActive="selected">
+                <ion-label>Mis Pedidos</ion-label>
+              </ion-item></ion-menu-toggle
+            >
+          }
 
-          <ion-item routerLink="/home">
-            <ion-label>Inicio</ion-label>
-          </ion-item>
-
-          <ion-item routerLink="/catalog">
-            <ion-label>Catálogo</ion-label>
-          </ion-item>
-
-          <ion-item *ngIf="role === 'cliente'" routerLink="/orders">
-
-            <ion-label>Mis Pedidos</ion-label>
-
-          </ion-item>
-
-          <ion-item *ngIf="role === 'comerciante'" routerLink="/products">
-
-            <ion-label>Gestionar Productos</ion-label>
-
-          </ion-item>
-
-          <ion-item *ngIf="role === 'admin'" routerLink="/admin">
-            
-            <ion-label>Panel Admin</ion-label>
-         
-          </ion-item>
-
-        </ion-menu-toggle>
-
-      </ion-list>
-
+          @if (currentSession.role === 'comerciante') {
+            <ion-menu-toggle auto-hide="true"
+              ><ion-item routerLink="/manage-orders" routerLinkActive="selected">
+                <ion-label>Gestionar Pedidos</ion-label>
+              </ion-item></ion-menu-toggle
+            >
+          }
+        </ion-list>
+      }
     </ion-content>
-
+    @if (session()) {
+      <ion-footer
+        ><ion-toolbar
+          ><ion-button fill="clear" expand="block" (click)="logout()">Cerrar sesión</ion-button></ion-toolbar
+        ></ion-footer
+      >
+    }
   </ion-menu>
 
   <ion-router-outlet id="main-content"></ion-router-outlet>
-
 </ion-app>

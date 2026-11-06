@@ -1,0 +1,8 @@
+.detail-page { max-width: 620px; margin: 0 auto; }
+.title-row { display: flex; align-items: start; justify-content: space-between; gap: 18px; margin: 8px 0 18px; }
+.title-row h1 { margin: 0; }
+.eyebrow { color: var(--ion-color-medium); margin: 0 0 3px; }
+ion-item h2 { white-space: normal; }
+ion-button { margin-top: 24px; }
+ion-note { display: block; margin: 24px 8px; }
+.loading { display: grid; place-items: center; gap: 12px; margin-top: 20vh; }

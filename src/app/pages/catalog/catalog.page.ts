@@ -1,12 +1,15 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { 
-  IonHeader, 
-  IonToolbar, 
-  IonButtons, 
-  IonMenuButton, 
-  IonTitle, 
-  IonContent 
+import { Component } from '@angular/core';
+import {
+  IonHeader,
+  IonToolbar,
+  IonButtons,
+  IonMenuButton,
+  IonTitle,
+  IonContent,
+  IonList,
+  IonItem,
+  IonLabel,
 } from '@ionic/angular';
 
 @Component({
@@ -21,7 +24,10 @@ import {
     IonButtons,
     IonMenuButton,
     IonTitle,
-    IonContent
-  ]
+    IonContent,
+    IonList,
+    IonItem,
+    IonLabel,
+  ],
 })
 export class CatalogPage {}

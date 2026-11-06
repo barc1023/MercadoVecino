@@ -1,7 +1,8 @@
-import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
-
+import type { OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import {
   IonApp,
   IonMenu,
@@ -13,9 +14,12 @@ import {
   IonItem,
   IonLabel,
   IonMenuToggle,
-  IonRouterOutlet
+  IonRouterOutlet,
+  IonButton,
+  IonFooter,
 } from '@ionic/angular';
 
+import { AuthService } from './services/auth.service';
 import { SessionService } from './services/session.service';
 
 @Component({
@@ -26,6 +30,7 @@ import { SessionService } from './services/session.service';
   imports: [
     CommonModule,
     RouterLink,
+    RouterLinkActive,
     IonApp,
     IonMenu,
     IonHeader,
@@ -36,16 +41,23 @@ import { SessionService } from './services/session.service';
     IonItem,
     IonLabel,
     IonMenuToggle,
-    IonRouterOutlet
+    IonRouterOutlet,
+    IonButton,
+    IonFooter,
   ],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+  private readonly sessionService = inject(SessionService);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+  readonly session = toSignal(this.sessionService.session$, { initialValue: null });
 
-  private sessionService = inject(SessionService);
+  async ngOnInit(): Promise<void> {
+    await this.authService.initializeSession();
+  }
 
-  role = this.sessionService.getRole();
-
-  constructor() {
-    console.log('ROL ACTUAL:', this.role);
+  async logout(): Promise<void> {
+    await this.authService.logout();
+    await this.router.navigateByUrl('/login', { replaceUrl: true });
   }
 }

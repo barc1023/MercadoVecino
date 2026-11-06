@@ -7,13 +7,17 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">home</ion-title>
-    </ion-toolbar>
-  </ion-header>
-</ion-content>
 <ion-content class="ion-padding">
-  <h1>Bienvenido a MercadoVecino</h1>
+  <main class="welcome">
+    <p class="eyebrow">MercadoVecino</p>
+    <h1>Hola, {{ session()?.fullName || 'vecino' }}</h1>
+    @if (session()?.role === 'comerciante') {
+    <p>Consulta los pedidos recibidos y actualiza su progreso para tus clientes.</p>
+    <ion-button routerLink="/manage-orders">Gestionar pedidos</ion-button>
+    } @else {
+    <p>Haz un pedido a tu comercio de confianza y síguelo en tiempo real.</p>
+    <ion-button routerLink="/orders/new">Hacer un pedido</ion-button>
+    <ion-button routerLink="/orders" fill="outline">Ver mis pedidos</ion-button>
+    }
+  </main>
 </ion-content>

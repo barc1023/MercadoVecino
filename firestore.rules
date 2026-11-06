@@ -1,0 +1,85 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    function isMerchant() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'comerciante';
+    }
+
+    function validNewProfile() {
+      return request.resource.data.keys().hasOnly(['fullName', 'email', 'role', 'createdAt'])
+        && request.resource.data.fullName is string
+        && request.resource.data.fullName.size() >= 2
+        && request.resource.data.fullName.size() <= 80
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.role == 'cliente'
+        && request.resource.data.createdAt is timestamp;
+    }
+
+    function validNewOrder() {
+      return request.resource.data.keys().hasOnly([
+          'productName', 'quantity', 'deliveryAddress', 'notes', 'ownerUid',
+          'ownerName', 'ownerEmail', 'status', 'createdAt', 'updatedAt'
+        ])
+        && request.resource.data.productName is string
+        && request.resource.data.productName.size() >= 2
+        && request.resource.data.productName.size() <= 80
+        && request.resource.data.quantity is int
+        && request.resource.data.quantity >= 1
+        && request.resource.data.quantity <= 99
+        && request.resource.data.deliveryAddress is string
+        && request.resource.data.deliveryAddress.size() >= 8
+        && request.resource.data.deliveryAddress.size() <= 180
+        && request.resource.data.notes is string
+        && request.resource.data.notes.size() <= 300
+        && request.resource.data.ownerName is string
+        && request.resource.data.ownerEmail == request.auth.token.email
+        && request.resource.data.status == 'pending'
+        && request.resource.data.createdAt is timestamp
+        && request.resource.data.updatedAt is timestamp;
+    }
+
+    function changesOnlyStatus() {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updatedAt'])
+        && request.resource.data.updatedAt is timestamp;
+    }
+
+    function merchantTransitionIsValid() {
+      return (resource.data.status == 'pending' && request.resource.data.status == 'preparing')
+        || (resource.data.status == 'preparing' && request.resource.data.status == 'on_the_way')
+        || (resource.data.status == 'on_the_way' && request.resource.data.status == 'delivered');
+    }
+
+    match /users/{uid} {
+      allow get: if isOwner(uid);
+      allow create: if isOwner(uid) && validNewProfile();
+      allow update: if isOwner(uid)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['fullName'])
+        && request.resource.data.fullName is string
+        && request.resource.data.fullName.size() >= 2
+        && request.resource.data.fullName.size() <= 80;
+      allow delete: if false;
+    }
+
+    match /orders/{orderId} {
+      // Customer queries must filter by ownerUid; merchants can read all orders.
+      allow get, list: if isOwner(resource.data.ownerUid) || isMerchant();
+      allow create: if isOwner(request.resource.data.ownerUid) && validNewOrder();
+      allow update: if (isMerchant() && changesOnlyStatus() && merchantTransitionIsValid())
+        || (isOwner(resource.data.ownerUid) && changesOnlyStatus()
+          && resource.data.status == 'pending' && request.resource.data.status == 'cancelled');
+      // Cancellation is logical; preserving the document keeps the order history.
+      allow delete: if false;
+    }
+  }
+}
