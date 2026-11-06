@@ -1,0 +1,64 @@
+<ion-header
+  ><ion-toolbar
+    ><ion-buttons slot="start"><ion-back-button defaultHref="/orders"></ion-back-button></ion-buttons
+    ><ion-title>Detalle del pedido</ion-title></ion-toolbar
+  ></ion-header
+>
+<ion-content class="ion-padding">
+  @if (order$ | async; as order) {
+  <main class="detail-page">
+    <div class="title-row">
+      <div>
+        <p class="eyebrow">Pedido</p>
+        <h1>{{ order.productName }}</h1>
+      </div>
+      <ion-badge
+        [color]="order.status === 'cancelled' ? 'medium' : order.status === 'delivered' ? 'success' : 'primary'"
+        >{{ statusLabel[order.status] }}</ion-badge
+      >
+    </div>
+    <ion-list inset="true">
+      <ion-item
+        ><ion-label
+          ><p>Cantidad</p>
+          <h2>{{ order.quantity }} unidad(es)</h2></ion-label
+        ></ion-item
+      >
+      <ion-item
+        ><ion-label
+          ><p>Dirección de entrega</p>
+          <h2>{{ order.deliveryAddress }}</h2></ion-label
+        ></ion-item
+      >
+      @if (order.notes) {
+      <ion-item
+        ><ion-label
+          ><p>Notas</p>
+          <h2>{{ order.notes }}</h2></ion-label
+        ></ion-item
+      >
+      }
+      <ion-item
+        ><ion-label
+          ><p>Creado</p>
+          <h2>{{ order.createdAt?.toDate() | date: 'd MMMM y, h:mm a' }}</h2></ion-label
+        ></ion-item
+      >
+    </ion-list>
+    @if (order.status === 'pending') {
+    <ion-button
+      color="danger"
+      expand="block"
+      fill="outline"
+      [disabled]="cancelling"
+      (click)="confirmCancellation(order)"
+      >Cancelar pedido</ion-button
+    >
+    } @else if (order.status === 'cancelled') {
+    <ion-note color="medium">Este pedido fue cancelado y permanece visible como parte de tu historial.</ion-note>
+    }
+  </main>
+  } @else {
+  <div class="loading"><ion-spinner></ion-spinner><ion-note>Cargando pedido…</ion-note></div>
+  }
+</ion-content>

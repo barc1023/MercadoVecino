@@ -1,0 +1,43 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Mis pedidos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <section class="page-heading">
+    <div>
+      <h1>Mis pedidos</h1>
+      <p>Revisa el avance de tus compras.</p>
+    </div>
+    <ion-button routerLink="/orders/new">Nuevo pedido</ion-button>
+  </section>
+  @if (orders$ | async; as orders) { @if (orders.length) {
+  <ion-list inset="true">
+    @for (order of orders; track order.id) {
+    <ion-item button detail="true" [routerLink]="['/orders', order.id]">
+      <ion-label
+        ><h2>{{ order.productName }}</h2>
+        <p>{{ order.quantity }} unidad(es) · {{ order.createdAt?.toDate() | date: 'd MMM, y · h:mm a' }}</p></ion-label
+      >
+      <ion-badge
+        slot="end"
+        [color]="order.status === 'cancelled' ? 'medium' : order.status === 'delivered' ? 'success' : 'primary'"
+        >{{ statusLabel[order.status] }}</ion-badge
+      >
+    </ion-item>
+    }
+  </ion-list>
+  } @else {
+  <div class="empty-state">
+    <h2>Aún no tienes pedidos</h2>
+    <p>Cuando hagas uno, aparecerá aquí sin tener que actualizar la pantalla.</p>
+    <ion-button routerLink="/orders/new">Crear mi primer pedido</ion-button>
+  </div>
+  } } @else {
+  <div class="loading"><ion-spinner></ion-spinner><ion-note>Cargando pedidos…</ion-note></div>
+  }
+</ion-content>
