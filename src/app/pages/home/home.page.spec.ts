@@ -1,6 +1,6 @@
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
+import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 
 import { SessionService } from '../../services/session.service';
@@ -14,15 +14,10 @@ describe('HomePage', () => {
     await TestBed.configureTestingModule({
       imports: [HomePage],
       providers: [
+        provideRouter([]), // <-- Esto provee todo el sistema de rutas (Router, ActivatedRoute, RouterLink, etc.)
         { 
           provide: SessionService, 
           useValue: { session$: of(null) } 
-        },
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: { paramMap: { get: () => '1' } }
-          }
         }
       ]
     }).compileComponents();
