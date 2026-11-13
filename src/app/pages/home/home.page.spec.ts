@@ -11,13 +11,17 @@ describe('HomePage', () => {
   let component: HomePage;
   let fixture: ComponentFixture<HomePage>;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       providers: [
-        { provide: SessionService, useValue: { session$: of(null) } },
         provideRouter([]),
+        {
+          provide: SessionService,
+          useValue: { session$: of(null) },
+        },
       ],
-    });
+    }).compileComponents();
+
     fixture = TestBed.createComponent(HomePage);
     component = fixture.componentInstance;
     fixture.detectChanges();
