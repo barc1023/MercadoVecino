@@ -1,86 +1,63 @@
-import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import type { OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import {
   IonApp,
-  IonSplitPane,
   IonMenu,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
   IonContent,
   IonList,
-  IonListHeader,
-  IonNote,
-  IonMenuToggle,
   IonItem,
-  IonIcon,
   IonLabel,
+  IonMenuToggle,
   IonRouterOutlet,
-  IonRouterLink,
+  IonButton,
+  IonFooter,
 } from '@ionic/angular';
-import { addIcons } from 'ionicons';
-import {
-  mailOutline,
-  mailSharp,
-  paperPlaneOutline,
-  paperPlaneSharp,
-  heartOutline,
-  heartSharp,
-  archiveOutline,
-  archiveSharp,
-  trashOutline,
-  trashSharp,
-  warningOutline,
-  warningSharp,
-  bookmarkOutline,
-  bookmarkSharp,
-} from 'ionicons/icons';
+
+import { AuthService } from './services/auth.service';
+import { SessionService } from './services/session.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
+  standalone: true,
   imports: [
+    CommonModule,
     RouterLink,
     RouterLinkActive,
     IonApp,
-    IonSplitPane,
     IonMenu,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
     IonContent,
     IonList,
-    IonListHeader,
-    IonNote,
-    IonMenuToggle,
     IonItem,
-    IonIcon,
     IonLabel,
-    IonRouterLink,
+    IonMenuToggle,
     IonRouterOutlet,
+    IonButton,
+    IonFooter,
   ],
 })
-export class AppComponent {
-  protected readonly appPages = [
-    { title: 'Inbox', url: '/folder/Inbox', icon: 'mail' },
-    { title: 'Outbox', url: '/folder/Outbox', icon: 'paper-plane' },
-    { title: 'Favorites', url: '/folder/Favorites', icon: 'heart' },
-    { title: 'Archived', url: '/folder/Archived', icon: 'archive' },
-    { title: 'Trash', url: '/folder/Trash', icon: 'trash' },
-    { title: 'Spam', url: '/folder/Spam', icon: 'warning' },
-  ];
-  protected readonly labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
-  constructor() {
-    addIcons({
-      mailOutline,
-      mailSharp,
-      paperPlaneOutline,
-      paperPlaneSharp,
-      heartOutline,
-      heartSharp,
-      archiveOutline,
-      archiveSharp,
-      trashOutline,
-      trashSharp,
-      warningOutline,
-      warningSharp,
-      bookmarkOutline,
-      bookmarkSharp,
-    });
+export class AppComponent implements OnInit {
+  private readonly sessionService = inject(SessionService);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+  readonly session = toSignal(this.sessionService.session$, { initialValue: null });
+
+  async ngOnInit(): Promise<void> {
+    await this.authService.initializeSession();
+  }
+
+  async logout(): Promise<void> {
+    await this.authService.logout();
+    await this.router.navigateByUrl('/login', { replaceUrl: true });
   }
 }

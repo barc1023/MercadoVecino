@@ -1,0 +1,14 @@
+sequenceDiagram
+  actor U as Usuario
+  participant P as App Ionic
+  participant A as Firebase Authentication
+  participant F as Cloud Firestore
+  participant S as Capacitor Preferences
+
+  U->>P: Escribe correo y contraseña
+  P->>A: signInWithEmailAndPassword()
+  A-->>P: uid autenticado
+  P->>F: get users/{uid}
+  F-->>P: nombre, correo y rol
+  P->>S: Guarda la sesión mínima
+  P-->>U: Navega al inicio según rol
