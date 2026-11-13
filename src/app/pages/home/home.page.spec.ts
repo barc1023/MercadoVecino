@@ -1,6 +1,6 @@
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { ActivatedRoute, provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 
 import { SessionService } from '../../services/session.service';
@@ -15,6 +15,14 @@ describe('HomePage', () => {
     await TestBed.configureTestingModule({
       providers: [
         provideRouter([]),
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              queryParamMap: new Map(),
+            },
+          },
+        },
         {
           provide: SessionService,
           useValue: { session$: of(null) },
