@@ -35,7 +35,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Create production environment
+      - name: Create environment files
         env:
           FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
           FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
@@ -45,7 +45,7 @@ jobs:
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
         run: |
           node --input-type=module <<'NODE'
-          import { writeFileSync } from 'node:fs';
+          import { mkdirSync, writeFileSync } from 'node:fs';
 
           const names = [
             'FIREBASE_API_KEY',
@@ -60,22 +60,29 @@ jobs:
             throw new Error(`Missing GitHub Actions secrets: ${missing.join(', ')}`);
           }
 
-          const environment = {
-            production: true,
-            firebase: {
-              apiKey: process.env.FIREBASE_API_KEY,
-              authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-              projectId: process.env.FIREBASE_PROJECT_ID,
-              storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-              messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-              appId: process.env.FIREBASE_APP_ID,
-            },
+          const firebase = {
+            apiKey: process.env.FIREBASE_API_KEY,
+            authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+            projectId: process.env.FIREBASE_PROJECT_ID,
+            storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+            messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+            appId: process.env.FIREBASE_APP_ID,
           };
 
-          writeFileSync(
-            'src/environments/environment.prod.ts',
-            `export const environment = ${JSON.stringify(environment, null, 2)};\n`,
-          );
+          // Angular necesita ambos archivos: environment.ts (el que importa el código)
+          // y environment.prod.ts (el que lo reemplaza al compilar en producción).
+          const files = {
+            'src/environments/environment.ts': false,
+            'src/environments/environment.prod.ts': true,
+          };
+
+          mkdirSync('src/environments', { recursive: true });
+          for (const [path, production] of Object.entries(files)) {
+            writeFileSync(
+              path,
+              `export const environment = ${JSON.stringify({ production, firebase }, null, 2)};\n`,
+            );
+          }
           NODE
 
       - name: Build production app
