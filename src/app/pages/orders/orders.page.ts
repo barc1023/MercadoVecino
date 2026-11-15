@@ -19,6 +19,7 @@ import {
 } from '@ionic/angular';
 import type { Observable } from 'rxjs';
 
+import { orderStatusColor } from '../../core/order-status-color';
 import { orderStatusLabel } from '../../models/order-status';
 import type { Order } from '../../models/order.model';
 import { AuthService } from '../../services/auth.service';
@@ -55,6 +56,7 @@ export class OrdersPage implements OnInit {
 
   orders$?: Observable<Order[]>;
   readonly statusLabel = orderStatusLabel;
+  readonly statusColor = orderStatusColor;
 
   async ngOnInit(): Promise<void> {
     const session = await this.auth.activeSession();

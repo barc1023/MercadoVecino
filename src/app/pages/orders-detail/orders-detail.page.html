@@ -12,10 +12,7 @@
         <p class="eyebrow">Pedido</p>
         <h1>{{ order.productName }}</h1>
       </div>
-      <ion-badge
-        [color]="order.status === 'cancelled' ? 'medium' : order.status === 'delivered' ? 'success' : 'primary'"
-        >{{ statusLabel[order.status] }}</ion-badge
-      >
+      <ion-badge [color]="statusColor[order.status]">{{ statusLabel[order.status] }}</ion-badge>
     </div>
     <ion-list inset="true">
       <ion-item

@@ -10,20 +10,20 @@
  */
 
 /* Core CSS required for Ionic components to work properly */
-@import "@ionic/angular/css/core.css";
+@import '@ionic/angular/css/core.css';
 
 /* Basic CSS for apps built with Ionic */
-@import "@ionic/angular/css/normalize.css";
-@import "@ionic/angular/css/structure.css";
-@import "@ionic/angular/css/typography.css";
-@import "@ionic/angular/css/display.css";
+@import '@ionic/angular/css/normalize.css';
+@import '@ionic/angular/css/structure.css';
+@import '@ionic/angular/css/typography.css';
+@import '@ionic/angular/css/display.css';
 
 /* Optional CSS utils that can be commented out */
-@import "@ionic/angular/css/padding.css";
-@import "@ionic/angular/css/float-elements.css";
-@import "@ionic/angular/css/text-alignment.css";
-@import "@ionic/angular/css/text-transformation.css";
-@import "@ionic/angular/css/flex-utils.css";
+@import '@ionic/angular/css/padding.css';
+@import '@ionic/angular/css/float-elements.css';
+@import '@ionic/angular/css/text-alignment.css';
+@import '@ionic/angular/css/text-transformation.css';
+@import '@ionic/angular/css/flex-utils.css';
 
 /**
  * Ionic Dark Mode
@@ -35,3 +35,49 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
+
+/*
+ * Pantallas de autenticación (login y registro)
+ * Ambas páginas comparten esta tarjeta para que se vean coherentes; las reglas
+ * se limitan a .auth-card para no afectar al resto de la aplicación.
+ */
+.auth-card {
+  max-width: 440px;
+  margin: 8vh auto 0;
+}
+
+.auth-card .eyebrow {
+  margin-bottom: 4px;
+  color: var(--ion-color-primary);
+  font-weight: 700;
+}
+
+.auth-card h1 {
+  margin: 0;
+}
+
+.auth-card .intro {
+  color: var(--ion-color-medium);
+}
+
+.auth-card form {
+  margin-top: 28px;
+}
+
+.auth-card ion-button {
+  margin-top: 28px;
+}
+
+.auth-card ion-note {
+  display: block;
+  margin: 6px 16px 12px;
+}
+
+.auth-card .form-error {
+  margin: 16px 0 0;
+}
+
+.auth-card .account-link {
+  text-align: center;
+  margin-top: 24px;
+}

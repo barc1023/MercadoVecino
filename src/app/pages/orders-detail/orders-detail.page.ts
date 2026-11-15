@@ -21,6 +21,7 @@ import {
 import type { Observable } from 'rxjs';
 
 import { userMessage } from '../../core/error-message';
+import { orderStatusColor } from '../../core/order-status-color';
 import { orderStatusLabel } from '../../models/order-status';
 import type { Order } from '../../models/order.model';
 import { OrderService } from '../../services/order.service';
@@ -57,6 +58,7 @@ export class OrdersDetailPage {
   readonly orderId = this.route.snapshot.paramMap.get('id') ?? '';
   readonly order$: Observable<Order | null> = this.orders.orderById(this.orderId);
   readonly statusLabel = orderStatusLabel;
+  readonly statusColor = orderStatusColor;
   cancelling = false;
 
   async confirmCancellation(order: Order): Promise<void> {

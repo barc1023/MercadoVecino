@@ -72,8 +72,10 @@ export class OrdersFormPage {
     }
     this.busy = true;
     try {
-      const id = await this.orders.create(this.form.getRawValue(), session);
-      await this.router.navigateByUrl(`/orders/${id}`, { replaceUrl: true });
+      const raw = this.form.getRawValue();
+      // ion-input siempre entrega texto; el modelo espera la cantidad como número.
+      await this.orders.create({ ...raw, quantity: Number(raw.quantity) }, session);
+      await this.router.navigateByUrl('/orders', { replaceUrl: true });
       await this.showMessage('Pedido creado correctamente.', 'success');
     } catch (error) {
       await this.showMessage(userMessage(error, 'No se pudo guardar el pedido.'), 'danger');
