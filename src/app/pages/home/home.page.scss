@@ -1,0 +1,5 @@
+.welcome { max-width: 580px; margin: 14vh auto 0; text-align: center; }
+.welcome h1 { margin: 0; }
+.welcome p:not(.eyebrow) { color: var(--ion-color-medium); font-size: 1.1rem; }
+.eyebrow { color: var(--ion-color-primary); font-weight: 700; margin-bottom: 4px; }
+ion-button { margin: 12px 6px 0; }

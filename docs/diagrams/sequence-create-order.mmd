@@ -1,0 +1,17 @@
+sequenceDiagram
+  actor C as Cliente
+  participant P as App Ionic
+  participant S as OrderService
+  participant F as Cloud Firestore
+  participant R as Reglas Firestore
+  participant M as Comerciante
+
+  C->>P: Confirma formulario de pedido
+  P->>S: create(datos, sesión)
+  S->>F: addDoc(orders)
+  F->>R: Valida ownerUid, campos y estado pending
+  R-->>F: Permite creación
+  F-->>S: id del pedido
+  S-->>P: id del pedido
+  P-->>C: Muestra detalle
+  F-->>M: Actualiza lista en tiempo real

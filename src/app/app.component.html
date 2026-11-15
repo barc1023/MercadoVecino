@@ -1,44 +1,60 @@
 <ion-app>
-  <ion-split-pane contentId="main-content">
-    <ion-menu contentId="main-content" type="overlay">
-      <ion-content>
-        <ion-list id="inbox-list">
-          <ion-list-header>Inbox</ion-list-header>
-          <ion-note>hi&#64;ionicframework.com</ion-note>
+  <ion-menu content-id="main-content" [disabled]="!session()">
+    <ion-header>
+      <ion-toolbar color="primary">
+        <ion-title>MercadoVecino</ion-title>
+      </ion-toolbar>
+    </ion-header>
 
-          @for (p of appPages; track p; let i = $index) {
-            <ion-menu-toggle auto-hide="false">
-              <ion-item
-                routerDirection="root"
-                [routerLink]="[p.url]"
-                lines="none"
-                detail="false"
-                routerLinkActive="selected"
-              >
-                <ion-icon
-                  aria-hidden="true"
-                  slot="start"
-                  [ios]="p.icon + '-outline'"
-                  [md]="p.icon + '-sharp'"
-                ></ion-icon>
-                <ion-label>{{ p.title }}</ion-label>
-              </ion-item>
-            </ion-menu-toggle>
+    <ion-content>
+      @if (session(); as currentSession) {
+        <ion-list>
+          <ion-item lines="none"
+            ><ion-label
+              ><strong>{{ currentSession.fullName }}</strong>
+              <p>{{ currentSession.role === 'comerciante' ? 'Comerciante' : 'Cliente' }}</p></ion-label
+            ></ion-item
+          >
+        </ion-list>
+        <ion-list>
+          <ion-menu-toggle auto-hide="true"
+            ><ion-item routerLink="/home" routerLinkActive="selected">
+              <ion-label>Inicio</ion-label>
+            </ion-item></ion-menu-toggle
+          >
+
+          <ion-menu-toggle auto-hide="true"
+            ><ion-item routerLink="/catalog" routerLinkActive="selected">
+              <ion-label>Catálogo</ion-label>
+            </ion-item></ion-menu-toggle
+          >
+
+          @if (currentSession.role === 'cliente') {
+            <ion-menu-toggle auto-hide="true"
+              ><ion-item routerLink="/orders" routerLinkActive="selected">
+                <ion-label>Mis Pedidos</ion-label>
+              </ion-item></ion-menu-toggle
+            >
+          }
+
+          @if (currentSession.role === 'comerciante') {
+            <ion-menu-toggle auto-hide="true"
+              ><ion-item routerLink="/manage-orders" routerLinkActive="selected">
+                <ion-label>Gestionar Pedidos</ion-label>
+              </ion-item></ion-menu-toggle
+            >
           }
         </ion-list>
+      }
+    </ion-content>
+    @if (session()) {
+      <ion-footer
+        ><ion-toolbar
+          ><ion-button fill="clear" expand="block" (click)="logout()">Cerrar sesión</ion-button></ion-toolbar
+        ></ion-footer
+      >
+    }
+  </ion-menu>
 
-        <ion-list id="labels-list">
-          <ion-list-header>Labels</ion-list-header>
-
-          @for (label of labels; track label) {
-            <ion-item lines="none">
-              <ion-icon aria-hidden="true" slot="start" ios="bookmark-outline" md="bookmark-sharp"></ion-icon>
-              <ion-label>{{ label }}</ion-label>
-            </ion-item>
-          }
-        </ion-list>
-      </ion-content>
-    </ion-menu>
-    <ion-router-outlet id="main-content"></ion-router-outlet>
-  </ion-split-pane>
+  <ion-router-outlet id="main-content"></ion-router-outlet>
 </ion-app>

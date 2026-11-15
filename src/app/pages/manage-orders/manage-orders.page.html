@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title> Gestionar Pedidos </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <section class="page-heading">
+    <h1>Pedidos recibidos</h1>
+    <p>Los cambios se reflejan en tiempo real para el cliente.</p>
+  </section>
+
+  @if (orders$ | async; as orders) { @if (orders.length) {
+  <ion-list inset="true">
+    @for(order of orders; track order.id){
+
+    <ion-item>
+      <ion-label>
+        <h2>{{ order.productName }} · {{ order.quantity }} u.</h2>
+        <p>{{ order.ownerName }} · {{ order.ownerEmail }}</p>
+        <p>{{ order.deliveryAddress }}</p>
+        @if (order.notes) {
+        <p>Nota: {{ order.notes }}</p>
+        }
+      </ion-label>
+
+      <ion-select
+        aria-label="Estado del pedido"
+        interface="action-sheet"
+        [value]="order.status"
+        [disabled]="updatingOrderId === order.id || order.status === 'delivered' || order.status === 'cancelled'"
+        (ionChange)="updateStatus(order, $event.detail.value)"
+      >
+        @for (status of statusOptions(order.status); track status) {
+        <ion-select-option [value]="status" [disabled]="status === order.status"
+          >{{ statusLabel[status] }}</ion-select-option
+        >
+        }
+      </ion-select>
+    </ion-item>
+
+    }
+  </ion-list>
+  } @else {
+  <div class="empty-state">
+    <h2>No hay pedidos todavía</h2>
+    <p>Los pedidos nuevos aparecerán aquí automáticamente.</p>
+  </div>
+  } } @else {
+  <div class="loading"><ion-spinner></ion-spinner><ion-note>Cargando pedidos…</ion-note></div>
+  }
+</ion-content>

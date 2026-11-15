@@ -1,0 +1,8 @@
+.page-heading { margin: 8px 8px 16px; }
+.page-heading h1 { margin: 0; }
+.page-heading p { margin: 4px 0 0; color: var(--ion-color-medium); }
+ion-item { --padding-top: 6px; --padding-bottom: 6px; }
+ion-label h2, ion-label p { white-space: normal; }
+ion-select { min-width: 122px; max-width: 150px; }
+.empty-state { text-align: center; margin: 18vh auto 0; color: var(--ion-color-medium); }
+.loading { display: grid; place-items: center; gap: 12px; margin-top: 20vh; }

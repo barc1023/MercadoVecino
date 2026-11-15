@@ -1,0 +1,22 @@
+erDiagram
+  USERS ||--o{ ORDERS : "crea"
+  USERS {
+    string uid PK
+    string fullName
+    string email
+    string role
+    timestamp createdAt
+  }
+  ORDERS {
+    string id PK
+    string ownerUid FK
+    string ownerName
+    string ownerEmail
+    string productName
+    int quantity
+    string deliveryAddress
+    string notes
+    string status
+    timestamp createdAt
+    timestamp updatedAt
+  }
