@@ -16,7 +16,12 @@ describe('OrdersPage', () => {
     TestBed.configureTestingModule({
       providers: [
         provideRouter([]),
-        { provide: AuthService, useValue: { activeSession: async () => null } },
+        {
+          provide: AuthService,
+          useValue: {
+            activeSession: async () => ({ uid: 'uid-1', fullName: 'Ana', email: 'ana@test.com', role: 'cliente' }),
+          },
+        },
         { provide: OrderService, useValue: { customerOrders: () => of([]) } },
       ],
     });

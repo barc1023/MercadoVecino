@@ -15,7 +15,13 @@
     </div>
     <ion-button routerLink="/orders/new">Nuevo pedido</ion-button>
   </section>
-  @if (orders$ | async; as orders) {
+  @if (loadError) {
+  <div class="empty-state">
+    <h2>Algo salió mal</h2>
+    <p>{{ loadError }}</p>
+    <ion-button (click)="ngOnInit()">Reintentar</ion-button>
+  </div>
+  } @else if (orders$ | async; as orders) {
   <ion-list inset="true">
     @for (order of orders; track order.id) {
     <ion-item button detail="true" [routerLink]="['/orders', order.id]">
