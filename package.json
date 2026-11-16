@@ -8,15 +8,17 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "lint": "npm run eslint && npm run typecheck:e2e && npm run prettier -- --check",
+    "lint": "npm run eslint && npm run typecheck:e2e && npm run typecheck:rules && npm run prettier -- --check",
     "lint:fix": "npm run eslint -- --fix && npm run prettier -- --write",
     "eslint": "ng lint --max-warnings 0",
     "prettier": "prettier \"**/*.{ts,html}\"",
     "typecheck:e2e": "tsc -p tsconfig.e2e.json",
+    "typecheck:rules": "tsc -p tsconfig.rules.json",
     "test": "npm run test:unit && npm run test:e2e",
     "test:unit": "ng test --no-watch",
     "test:unit:watch": "ng test --watch",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:rules": "pnpm dlx firebase-tools@15.36.0 emulators:exec --only firestore --project demo-mercadovecino \"vitest run --config vitest.rules.config.mts\""
   },
   "private": true,
   "dependencies": {
@@ -44,6 +46,7 @@
     "@angular/compiler-cli": "22.2.3",
     "@angular/language-service": "22.2.3",
     "@capacitor/cli": "8.6.0",
+    "@firebase/rules-unit-testing": "6.0.0",
     "@ionic/angular-toolkit": "^13.0.0",
     "@ionic/eslint-config": "^0.5.0",
     "@ionic/prettier-config": "^4.0.0",
