@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
@@ -58,7 +58,9 @@ export class OrdersFormPage {
     deliveryAddress: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(180)]],
     notes: ['', [Validators.maxLength(300)]],
   });
-  busy = false;
+  // La app corre sin zone.js: con signals la vista se entera sola de los
+  // cambios que ocurren después de un await, sin marcarla a mano.
+  readonly busy = signal(false);
 
   async submit(): Promise<void> {
     if (this.form.invalid) {
@@ -70,7 +72,7 @@ export class OrdersFormPage {
       await this.router.navigateByUrl('/login', { replaceUrl: true });
       return;
     }
-    this.busy = true;
+    this.busy.set(true);
     try {
       const raw = this.form.getRawValue();
       // ion-input siempre entrega texto; el modelo espera la cantidad como número.
@@ -80,7 +82,7 @@ export class OrdersFormPage {
     } catch (error) {
       await this.showMessage(userMessage(error, 'No se pudo guardar el pedido.'), 'danger');
     } finally {
-      this.busy = false;
+      this.busy.set(false);
     }
   }
 

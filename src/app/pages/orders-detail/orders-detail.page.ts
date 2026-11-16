@@ -1,5 +1,5 @@
 import { AsyncPipe, CommonModule, DatePipe } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
   AlertController,
@@ -59,7 +59,9 @@ export class OrdersDetailPage {
   readonly order$: Observable<Order | null> = this.orders.orderById(this.orderId);
   readonly statusLabel = orderStatusLabel;
   readonly statusColor = orderStatusColor;
-  cancelling = false;
+  // La app corre sin zone.js: con signals la vista se entera sola de los
+  // cambios que ocurren después de un await, sin marcarla a mano.
+  readonly cancelling = signal(false);
 
   async confirmCancellation(order: Order): Promise<void> {
     const alert = await this.alertController.create({
@@ -74,14 +76,14 @@ export class OrdersDetailPage {
   }
 
   private async cancel(order: Order): Promise<void> {
-    this.cancelling = true;
+    this.cancelling.set(true);
     try {
       await this.orders.cancel(order.id, order.status);
       await this.showMessage('Pedido cancelado.', 'success');
     } catch (error) {
       await this.showMessage(userMessage(error, 'No se pudo cancelar el pedido.'), 'danger');
     } finally {
-      this.cancelling = false;
+      this.cancelling.set(false);
     }
   }
 

@@ -33,10 +33,10 @@
       </ion-item>
       @if (form.controls.password.touched && form.controls.password.invalid) {
       <ion-note color="danger">Usa al menos 6 caracteres.</ion-note>
-      } @if (error) { <ion-note class="form-error" color="danger">{{ error }}</ion-note> }
+      } @if (error()) { <ion-note class="form-error" color="danger">{{ error() }}</ion-note> }
 
-      <ion-button type="submit" expand="block" [disabled]="busy">
-        @if (busy) { <ion-spinner name="crescent"></ion-spinner> } @else { Crear cuenta }
+      <ion-button type="submit" expand="block" [disabled]="busy()">
+        @if (busy()) { <ion-spinner name="crescent"></ion-spinner> } @else { Crear cuenta }
       </ion-button>
     </form>
 

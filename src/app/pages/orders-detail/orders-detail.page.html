@@ -47,7 +47,7 @@
       color="danger"
       expand="block"
       fill="outline"
-      [disabled]="cancelling"
+      [disabled]="cancelling()"
       (click)="confirmCancellation(order)"
       >Cancelar pedido</ion-button
     >
