@@ -23,7 +23,8 @@ service cloud.firestore {
         && request.resource.data.fullName.size() <= 80
         && request.resource.data.email == request.auth.token.email
         && request.resource.data.role == 'cliente'
-        && request.resource.data.createdAt is timestamp;
+        // serverTimestamp() se resuelve como request.time: la fecha no se puede inventar
+        && request.resource.data.createdAt == request.time;
     }
 
     function validNewOrder() {
@@ -42,16 +43,17 @@ service cloud.firestore {
         && request.resource.data.deliveryAddress.size() <= 180
         && request.resource.data.notes is string
         && request.resource.data.notes.size() <= 300
-        && request.resource.data.ownerName is string
+        // El nombre del pedido debe ser el mismo del perfil del cliente
+        && request.resource.data.ownerName == get(/databases/$(database)/documents/users/$(request.auth.uid)).data.fullName
         && request.resource.data.ownerEmail == request.auth.token.email
         && request.resource.data.status == 'pending'
-        && request.resource.data.createdAt is timestamp
-        && request.resource.data.updatedAt is timestamp;
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time;
     }
 
     function changesOnlyStatus() {
       return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updatedAt'])
-        && request.resource.data.updatedAt is timestamp;
+        && request.resource.data.updatedAt == request.time;
     }
 
     function merchantTransitionIsValid() {

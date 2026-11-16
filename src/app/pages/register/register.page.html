@@ -13,10 +13,10 @@
     <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
       <ion-item>
         <ion-label position="stacked">Nombre completo</ion-label>
-        <ion-input autocomplete="name" formControlName="fullName"></ion-input>
+        <ion-input autocomplete="name" maxlength="80" formControlName="fullName"></ion-input>
       </ion-item>
       @if (form.controls.fullName.touched && form.controls.fullName.invalid) {
-      <ion-note color="danger">Escribe tu nombre.</ion-note>
+      <ion-note color="danger">Escribe tu nombre (de 2 a 80 caracteres).</ion-note>
       }
 
       <ion-item>
