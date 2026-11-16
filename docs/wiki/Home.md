@@ -5,7 +5,9 @@ Esta carpeta contiene el contenido listo para publicar en la wiki del repositori
 ## Índice
 
 - [Arquitectura y datos](Arquitectura-y-datos.md)
+- [Diccionario de datos](Diccionario-de-datos.md)
 - [Seguridad de Firestore](Seguridad-Firestore.md)
+- [Catalogo de operaciones](Catalogo-de-operaciones.md)
 - [Manual de usuario](Manual-de-usuario.md)
 - [Jira y sprints](Jira-y-sprints.md)
 
