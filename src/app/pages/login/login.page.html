@@ -25,12 +25,12 @@
       </ion-item>
       @if (form.controls.password.touched && form.controls.password.invalid) {
       <ion-note color="danger">La contraseña debe tener al menos 6 caracteres.</ion-note>
-      } @if (error) {
-      <ion-note class="form-error" color="danger">{{ error }}</ion-note>
+      } @if (error()) {
+      <ion-note class="form-error" color="danger">{{ error() }}</ion-note>
       }
 
-      <ion-button type="submit" expand="block" [disabled]="busy">
-        @if (busy) { <ion-spinner name="crescent"></ion-spinner> } @else { Entrar }
+      <ion-button type="submit" expand="block" [disabled]="busy()">
+        @if (busy()) { <ion-spinner name="crescent"></ion-spinner> } @else { Entrar }
       </ion-button>
     </form>
 
