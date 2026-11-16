@@ -108,6 +108,7 @@
               "src/**/*.ts",
               "src/**/*.html",
               "e2e/**/*.ts",
+              "firestore-tests/**/*.ts",
               "playwright.config.ts"
             ]
           }

@@ -28,4 +28,10 @@ jobs:
           cp src/environments/environment.prod.example.ts src/environments/environment.prod.ts
       - run: pnpm lint
       - run: pnpm test:unit
+      # El emulador de Firestore necesita Java para probar firestore.rules
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - run: pnpm test:rules
       - run: pnpm build
