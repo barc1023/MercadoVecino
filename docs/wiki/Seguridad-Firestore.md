@@ -138,12 +138,22 @@ En una simulacion `update`, el Playground muestra el documento actual y deja edi
 
 ### Evidencia
 
-Guardar las capturas en `docs/wiki/img/rules-playground/` con el numero de la prueba (`U1.png` ... `U9.png`, `O1.png` ... `O15.png`) y marcar cada una en esta lista.
+Se ejecuto un grupo representativo de 8 pruebas, una por cada regla principal. Las simulaciones se hicieron con las reglas de este repositorio cargadas en el editor del Playground, sin publicarlas.
 
-| Pruebas | Capturas |
-| --- | --- |
-| Perfiles U1 a U9 | Pendiente |
-| Pedidos O1 a O15 | Pendiente |
+| Prueba | Que demuestra | Resultado | Captura |
+| --- | --- | --- | --- |
+| U2 | El usuario lee su propio perfil | Permitido | [U2](img/rules-playground/U2.png) |
+| U5 | Nadie puede registrarse como comerciante | Rechazado | [U5](img/rules-playground/U5.png) |
+| O2 | No se puede crear un pedido a nombre de otro | Rechazado | [O2](img/rules-playground/O2.png) |
+| O6 | El cliente lee su pedido | Permitido | [O6](img/rules-playground/O6.png) |
+| O7 | Otro usuario no puede leer el pedido | Rechazado | [O7](img/rules-playground/O7.png) |
+| O9 | El cliente no puede avanzar el estado | Rechazado | [O9](img/rules-playground/O9.png) |
+| O10 | El comerciante avanza `pending -> preparing` | Permitido | [O10](img/rules-playground/O10-ci.png) |
+| O15 | Nadie puede borrar un pedido | Rechazado | [O15](img/rules-playground/O15.png) |
+
+La O10 se verifico con la prueba automatica "el comerciante avanza pending -> preparing" de `firestore-tests/firestore.rules.test.ts`, que corre contra el emulador de Firestore en el CI (`pnpm test:rules`, 30 pruebas en verde).
+
+**Hallazgo:** al abrir el Playground se comprobo que el proyecto de Firebase tenia publicadas unas reglas temporales de desarrollo (`allow read, write: if request.auth != null`), no las de este repositorio. Hay que desplegar `firestore.rules` para que la app use estas reglas.
 
 ## Limitaciones conocidas
 
